@@ -1,10 +1,13 @@
 package com.sutran.expedientes.controller;
 
+import com.sutran.expedientes.dto.ConstanciaResponse;
+import com.sutran.expedientes.dto.DerivarCoactivoRequest;
 import com.sutran.expedientes.dto.ExpedienteRequest;
 import com.sutran.expedientes.dto.ExpedienteResponse;
 import com.sutran.expedientes.dto.PageResponse;
 import com.sutran.expedientes.entity.Expediente;
 import com.sutran.expedientes.exception.ApiException;
+import com.sutran.expedientes.service.ConstanciaService;
 import com.sutran.expedientes.service.ExpedienteService;
 import com.sutran.expedientes.service.FileStorageService;
 import jakarta.validation.Valid;
@@ -32,6 +35,7 @@ public class ExpedienteController {
 
     private final ExpedienteService expedienteService;
     private final FileStorageService fileStorageService;
+    private final ConstanciaService constanciaService;
 
     /** Bandeja de expedientes registrados (listado paginado con filtros). */
     @GetMapping
@@ -59,6 +63,14 @@ public class ExpedienteController {
                                                @RequestParam("archivo") MultipartFile archivo,
                                                Authentication authentication) {
         return expedienteService.adjuntarArchivo(idExpediente, archivo, authentication);
+    }
+
+    /** Deriva (transfiere) el expediente al área de Cobranza Coactiva, generando su constancia. */
+    @PostMapping("/{id}/derivar")
+    public ConstanciaResponse derivar(@PathVariable("id") Integer idExpediente,
+                                       @Valid @RequestBody DerivarCoactivoRequest request,
+                                       Authentication authentication) {
+        return constanciaService.derivarACoactivo(idExpediente, request, authentication);
     }
 
     /** Ver / descargar el archivo adjunto de un expediente. */

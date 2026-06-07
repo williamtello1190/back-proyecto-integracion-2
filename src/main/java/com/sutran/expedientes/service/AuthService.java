@@ -32,6 +32,8 @@ public class AuthService {
         Usuario usuario = usuarioRepository.findByUsuarioAndEstado(request.usuario(), "A").orElseThrow();
 
         return new LoginResponse(token, usuario.getUsuario(), usuario.getNombres(),
-                usuario.getApellidos(), usuario.getRol());
+                usuario.getApellidos(), usuario.getRol(),
+                usuario.getArea() != null ? usuario.getArea().getIdArea() : null,
+                usuario.getArea() != null ? usuario.getArea().getNombreArea() : null);
     }
 }
