@@ -1,0 +1,13 @@
+package com.sutran.expedientes;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ExpedientesBackendApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ExpedientesBackendApplication.class, args);
+	}
+
+}
