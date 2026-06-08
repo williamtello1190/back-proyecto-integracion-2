@@ -68,4 +68,16 @@ public class Expediente {
     /** Columna calculada en BD (PERSISTED) — solo lectura desde la app. */
     @Column(name = "fecha_limite_derivacion", insertable = false, updatable = false)
     private LocalDate fechaLimiteDerivacion;
+
+    @Column(name = "resumen_ia", length = 1000)
+    private String resumenIa;
+
+    @Column(name = "numero_resolucion", length = 60)
+    private String numeroResolucion;
+
+    @Column(name = "administrado", length = 200)
+    private String administrado;
+
+    @Column(name = "ruc_administrado", length = 20)
+    private String rucAdministrado;
 }

@@ -10,6 +10,7 @@ import com.sutran.expedientes.exception.ApiException;
 import com.sutran.expedientes.repository.AreaRepository;
 import com.sutran.expedientes.repository.ExpedienteRepository;
 import com.sutran.expedientes.repository.UsuarioRepository;
+import com.sutran.expedientes.service.ocr.ProcesamientoOcrIaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ public class ExpedienteService {
     private final UsuarioRepository usuarioRepository;
     private final AreaRepository areaRepository;
     private final FileStorageService fileStorageService;
+    private final ProcesamientoOcrIaService procesamientoOcrIaService;
 
     @Transactional(readOnly = true)
     public PageResponse<ExpedienteResponse> listar(String estado, String numero, Pageable pageable) {
@@ -80,6 +82,8 @@ public class ExpedienteService {
         if (ESTADO_REGISTRADO.equals(expediente.getEstado())) {
             expediente.setEstado("EN_PROCESO");
         }
+
+        procesamientoOcrIaService.procesar(expediente);
 
         return ExpedienteResponse.from(expedienteRepository.save(expediente));
     }

@@ -20,9 +20,21 @@ public record ExpedienteResponse(
         LocalDate fechaNotificacion,
         Integer diasPlazo,
         LocalDate fechaLimiteDerivacion,
-        boolean derivado
+        boolean derivado,
+        boolean procesadoOcr,
+        boolean aptoParaDerivar,
+        String resumenIa,
+        String numeroResolucion,
+        String administrado,
+        String rucAdministrado
 ) {
     public static ExpedienteResponse from(Expediente e) {
+        boolean derivado = Boolean.TRUE.equals(e.getDerivado());
+        boolean aptoParaDerivar = Boolean.TRUE.equals(e.getProcesadoOcr())
+                && !derivado
+                && e.getFechaLimiteDerivacion() != null
+                && !e.getFechaLimiteDerivacion().isAfter(LocalDate.now());
+
         return new ExpedienteResponse(
                 e.getIdExpediente(),
                 e.getNumeroExpediente(),
@@ -42,7 +54,13 @@ public record ExpedienteResponse(
                 e.getFechaNotificacion(),
                 e.getDiasPlazo(),
                 e.getFechaLimiteDerivacion(),
-                Boolean.TRUE.equals(e.getDerivado())
+                derivado,
+                Boolean.TRUE.equals(e.getProcesadoOcr()),
+                aptoParaDerivar,
+                e.getResumenIa(),
+                e.getNumeroResolucion(),
+                e.getAdministrado(),
+                e.getRucAdministrado()
         );
     }
 }
